@@ -1,6 +1,10 @@
 import config from "./utils/config";
 import express from "express";
 import mongoose from "mongoose";
+import userRouter from "./controllers/userController";
+
+const app = express();
+app.use(express.json());
 
 mongoose
     .connect(config.MONGO_URI)
@@ -13,10 +17,6 @@ mongoose
         }
     });
 
-const app = express();
-
-app.use("/", (_req, res) => {
-    res.send("Hello");
-});
+app.use("/user", userRouter);
 
 export default app;
