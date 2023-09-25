@@ -1,8 +1,9 @@
+import { dbConfig } from "./config";
+require("express-async-errors");
 import express from "express";
 import mongoose from "mongoose";
-import { dbConfig } from "./config";
 import userRouter from "./api/user";
-import "express-async-errors";
+import errorHandler from "./middleware/errorHandler";
 
 const app = express();
 app.use(express.json());
@@ -19,5 +20,6 @@ mongoose
     });
 
 app.use("/api/users", userRouter);
+app.use(errorHandler);
 
 export default app;

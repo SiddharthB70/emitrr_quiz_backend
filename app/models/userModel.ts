@@ -18,7 +18,7 @@ const userSchema = new Schema<IUser>({
 
                 return !user;
             },
-            message: "User already exists",
+            message: "Username already exists",
         },
     },
     passwordHash: { type: String, required: true },
