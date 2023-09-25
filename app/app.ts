@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import { dbConfig } from "./config";
 import userRouter from "./api/user";
+import "express-async-errors";
 
 const app = express();
 app.use(express.json());

@@ -3,7 +3,7 @@ interface NewUser {
     password: string;
 }
 
-const toNewUser = (user: unknown): NewUser => {
+const parseUser = (user: unknown): NewUser => {
     if (!(user && user instanceof Object))
         throw new Error("Request does not contain body");
 
@@ -32,4 +32,4 @@ const isString = (text: unknown): text is string => {
     return text instanceof String || typeof text === "string";
 };
 
-export default toNewUser;
+export default parseUser;
