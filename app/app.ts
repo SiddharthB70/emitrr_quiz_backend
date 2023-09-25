@@ -1,13 +1,13 @@
-import config from "./utils/config";
 import express from "express";
 import mongoose from "mongoose";
-import userRouter from "./controllers/userController";
+import { dbConfig } from "./config";
+import userRouter from "./api/user";
 
 const app = express();
 app.use(express.json());
 
 mongoose
-    .connect(config.MONGO_URI)
+    .connect(dbConfig.MONGO_URI)
     .then(() => {
         console.log("Connected to database");
     })
@@ -17,6 +17,6 @@ mongoose
         }
     });
 
-app.use("/user", userRouter);
+app.use("/api/users", userRouter);
 
 export default app;

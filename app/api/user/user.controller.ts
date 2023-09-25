@@ -1,11 +1,9 @@
-import { Router } from "express";
-import toNewUser from "../utils/toNewUser";
+import { Request, Response } from "express";
+import toNewUser from "./utils/toNewUser";
+import User from "../../models/userModel";
 import bcrypt from "bcrypt";
-import User from "../models/userModel";
 
-const userRouter = Router();
-
-userRouter.post("/", async (req, res) => {
+export const createNewUser = async (req: Request, res: Response) => {
     const body = toNewUser(req.body);
     const passwordHash = await bcrypt.hash(body.password, 10);
     const newUser = new User({
@@ -16,6 +14,4 @@ userRouter.post("/", async (req, res) => {
 
     const registeredUser = await newUser.save();
     res.status(201).send(registeredUser);
-});
-
-export default userRouter;
+};
