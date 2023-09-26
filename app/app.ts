@@ -1,16 +1,18 @@
 import { dbConfig } from "./config";
 require("express-async-errors");
 import express from "express";
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import userRouter from "./api/user";
 import errorHandler from "./middleware/errorHandler";
+import authHandler from "./middleware/authHandler";
 import session = require("express-session");
 import { createClient } from "redis";
 import RedisStore from "connect-redis";
+import questionsRouter from "./api/questions";
 
 declare module "express-session" {
     interface SessionData {
-        clientId: string;
+        clientId: Schema.Types.ObjectId;
     }
 }
 
@@ -58,6 +60,8 @@ app.use(
 );
 
 app.use("/api/users", userRouter);
+app.use(authHandler);
+app.use("/api/questions", questionsRouter);
 app.use(errorHandler);
 
 export default app;

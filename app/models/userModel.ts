@@ -4,6 +4,7 @@ interface IUser extends Document {
     username: string;
     passwordHash: string;
     proficiency: "amateur" | "semi-pro" | "professional";
+    _id: Schema.Types.ObjectId;
 }
 
 const userSchema = new Schema<IUser>({
