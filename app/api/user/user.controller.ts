@@ -25,6 +25,7 @@ export const loginUser = async (req: Request, res: Response) => {
         return res
             .status(401)
             .json({ type: "error", message: "incorrect credentials" });
+    req.session.clientId = "abc123";
 
     return res.status(200).json({ type: "success", message: "logged in" });
 };

@@ -4,6 +4,15 @@ import express from "express";
 import mongoose from "mongoose";
 import userRouter from "./api/user";
 import errorHandler from "./middleware/errorHandler";
+import session = require("express-session");
+import { createClient } from "redis";
+import RedisStore from "connect-redis";
+
+declare module "express-session" {
+    interface SessionData {
+        clientId: string;
+    }
+}
 
 const app = express();
 app.use(express.json());
@@ -18,6 +27,35 @@ mongoose
             console.log("Unable to connect to database. " + error.message);
         }
     });
+
+const redisClient = createClient({
+    socket: {
+        port: 6379,
+        host: "localhost",
+    },
+});
+redisClient
+    .connect()
+    .then(() => {
+        console.log("Connected to Redis Server");
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+app.use(
+    session({
+        store: new RedisStore({ client: redisClient }),
+        secret: "secret",
+        name: "session_id",
+        cookie: {
+            secure: false,
+            httpOnly: true,
+            maxAge: 1000 * 60 * 30,
+        },
+        saveUninitialized: false,
+        resave: false,
+    }),
+);
 
 app.use("/api/users", userRouter);
 app.use(errorHandler);
