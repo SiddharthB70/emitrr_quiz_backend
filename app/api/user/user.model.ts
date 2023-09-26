@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, Types, model } from "mongoose";
 import { IUser, IUserDocument } from "./user.types";
 
 const userSchema = new Schema<IUser>({
@@ -22,7 +22,7 @@ const userSchema = new Schema<IUser>({
 userSchema.set("toJSON", {
     transform: (_doc, ret) => {
         delete ret.passwordHash;
-        ret.id = ret._id as Schema.Types.ObjectId;
+        ret.id = ret._id as Types.ObjectId;
         delete ret._id;
         delete ret.__v;
         return ret;

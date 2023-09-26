@@ -2,6 +2,6 @@ import { Router } from "express";
 import { getQuestion } from "./questions.controller";
 const questionsRouter = Router();
 
-questionsRouter.get("/", getQuestion);
+questionsRouter.post("/", getQuestion);
 
 export default questionsRouter;
