@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import parseUser from "./utils/parseUser";
-import User from "../../models/userModel";
+import User from "./user.model";
 import bcrypt from "bcrypt";
 
 export const registerUser = async (req: Request, res: Response) => {
@@ -9,10 +9,9 @@ export const registerUser = async (req: Request, res: Response) => {
     const newUser = new User({
         username: body.username,
         passwordHash: passwordHash,
-        proficiency: "amateur",
     });
     const registeredUser = await newUser.save();
-    res.status(201).send(registeredUser);
+    res.status(201).json({ type: "success", user: registeredUser });
 };
 
 export const loginUser = async (req: Request, res: Response) => {
@@ -25,6 +24,9 @@ export const loginUser = async (req: Request, res: Response) => {
         return res
             .status(401)
             .json({ type: "error", message: "incorrect credentials" });
-    req.session.clientId = databaseUser?._id;
-    return res.status(200).json({ type: "success", message: "logged in" });
+    if (databaseUser) req.session.clientId = databaseUser._id.toString();
+
+    return res
+        .status(200)
+        .json({ type: "success", message: "logged in", user: databaseUser });
 };

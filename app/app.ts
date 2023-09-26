@@ -1,7 +1,7 @@
 import { dbConfig } from "./config";
 require("express-async-errors");
 import express from "express";
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 import userRouter from "./api/user";
 import errorHandler from "./middleware/errorHandler";
 import authHandler from "./middleware/authHandler";
@@ -12,7 +12,7 @@ import questionsRouter from "./api/questions";
 
 declare module "express-session" {
     interface SessionData {
-        clientId: Schema.Types.ObjectId;
+        clientId: string;
     }
 }
 

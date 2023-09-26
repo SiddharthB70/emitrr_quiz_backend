@@ -1,18 +1,12 @@
-import { Schema, model, Document } from "mongoose";
-
-interface IUser extends Document {
-    username: string;
-    passwordHash: string;
-    proficiency: "amateur" | "semi-pro" | "professional";
-    _id: Schema.Types.ObjectId;
-}
+import { Schema, model } from "mongoose";
+import { IUser, IUserDocument } from "./user.types";
 
 const userSchema = new Schema<IUser>({
     username: {
         type: String,
         required: true,
         validate: {
-            validator: async function (this: IUser) {
+            validator: async function (this: IUserDocument) {
                 const user = await this.$model("User").findOne({
                     username: this.username,
                 });
@@ -23,10 +17,15 @@ const userSchema = new Schema<IUser>({
         },
     },
     passwordHash: { type: String, required: true },
-    proficiency: {
-        type: String,
-        required: true,
-        enum: ["amateur", "semi-pro", "professional"],
+});
+
+userSchema.set("toJSON", {
+    transform: (_doc, ret) => {
+        delete ret.passwordHash;
+        ret.id = ret._id as Schema.Types.ObjectId;
+        delete ret._id;
+        delete ret.__v;
+        return ret;
     },
 });
 

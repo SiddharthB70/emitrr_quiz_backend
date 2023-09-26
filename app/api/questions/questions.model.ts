@@ -5,6 +5,7 @@ interface IQuestion {
     options: string[];
     answerIndex: number;
     difficulty: "amateur" | "semi-pro" | "professional";
+    _id: Schema.Types.ObjectId;
 }
 
 const questionSchema = new Schema<IQuestion>({
