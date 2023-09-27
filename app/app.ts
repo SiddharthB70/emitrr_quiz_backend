@@ -9,6 +9,7 @@ import session = require("express-session");
 import { createClient } from "redis";
 import RedisStore from "connect-redis";
 import questionsRouter from "./api/questions";
+import scoresRouter from "./api/scores";
 
 declare module "express-session" {
     interface SessionData {
@@ -62,6 +63,7 @@ app.use(
 app.use("/api/users", userRouter);
 app.use(authHandler);
 app.use("/api/questions", questionsRouter);
+app.use("/api/scores", scoresRouter);
 app.use(errorHandler);
 
 export default app;
