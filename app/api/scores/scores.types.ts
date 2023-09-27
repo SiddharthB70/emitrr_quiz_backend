@@ -11,3 +11,5 @@ export interface IScore {
 export interface LBRequest {
     language: string;
 }
+
+export type USRequest = Omit<IScore, "user">;

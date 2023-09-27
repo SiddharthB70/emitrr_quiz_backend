@@ -1,5 +1,11 @@
 import { dbConfig } from "./config";
 require("express-async-errors");
+declare module "express-session" {
+    interface SessionData {
+        clientId: string;
+    }
+}
+
 import express from "express";
 import mongoose from "mongoose";
 import userRouter from "./api/user";
@@ -10,12 +16,6 @@ import { createClient } from "redis";
 import RedisStore from "connect-redis";
 import questionsRouter from "./api/questions";
 import scoresRouter from "./api/scores";
-
-declare module "express-session" {
-    interface SessionData {
-        clientId: string;
-    }
-}
 
 const app = express();
 app.use(express.json());
