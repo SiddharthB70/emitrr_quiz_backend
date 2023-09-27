@@ -11,3 +11,12 @@ export const getLeaderBoard = async (req: Request, res: Response) => {
         .limit(50);
     res.json(leaderBoard);
 };
+
+export const getUserScore = async (req: Request, res: Response) => {
+    const userId = req.session.clientId;
+    const scores = await Score.find({ user: { _id: userId } }).select([
+        "-score",
+        "-user",
+    ]);
+    res.json(scores);
+};
