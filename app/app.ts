@@ -16,6 +16,7 @@ import { createClient } from "redis";
 import RedisStore from "connect-redis";
 import questionsRouter from "./api/questions";
 import scoresRouter from "./api/scores";
+import languagesRouter from "./api/languages";
 
 const app = express();
 app.use(express.json());
@@ -64,6 +65,7 @@ app.use("/api/users", userRouter);
 app.use(authHandler);
 app.use("/api/questions", questionsRouter);
 app.use("/api/scores", scoresRouter);
+app.use("/api/languages", languagesRouter);
 app.use(errorHandler);
 
 export default app;

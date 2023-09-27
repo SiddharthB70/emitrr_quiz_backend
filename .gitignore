@@ -4,3 +4,4 @@ build
 dbpassword.txt
 loadQuestions.ts
 loadScores.ts
+loadLanguages.ts
