@@ -1,10 +1,5 @@
 import { dbConfig } from "./config";
 require("express-async-errors");
-declare module "express-session" {
-    interface SessionData {
-        clientId: string;
-    }
-}
 
 import express from "express";
 import mongoose from "mongoose";
@@ -67,6 +62,12 @@ app.use(
         resave: false,
     }),
 );
+
+declare module "express-session" {
+    interface SessionData {
+        clientId: string;
+    }
+}
 
 app.use("/api/users", userRouter);
 app.use(authHandler);

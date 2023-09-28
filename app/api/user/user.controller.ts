@@ -25,3 +25,9 @@ export const loginUser = async (req: Request, res: Response) => {
 
     return res.status(200).json(databaseUser);
 };
+
+export const checkLoggedIn = async (req: Request, res: Response) => {
+    const userId = req.session.clientId;
+    const user = await User.findById(userId);
+    res.json(user);
+};
