@@ -1,15 +1,16 @@
 import { Types, isValidObjectId } from "mongoose";
 import { Difficulty } from "../../../types";
 import { IGetQuestionBody } from "../questions.types";
+import MissingFieldError from "../../../utils/missingFieldError";
+import RequestBodyError from "../../../utils/requestBodyError";
 
 const parseGetQuestion = (body: unknown): IGetQuestionBody => {
-    if (!(body && body instanceof Object))
-        throw new Error("Request does not contain body");
+    if (!(body && body instanceof Object)) throw new RequestBodyError();
 
-    if (!("difficulty" in body)) throw new Error("Difficulty unavailable");
-    if (!("language" in body)) throw new Error("Language unavailable");
-    if (!("limit" in body)) throw new Error("Difficulty unavailable");
-    if (!("exclude" in body)) throw new Error("Language unavailable");
+    if (!("difficulty" in body)) throw new MissingFieldError("Difficulty");
+    if (!("language" in body)) throw new MissingFieldError("Language");
+    if (!("limit" in body)) throw new MissingFieldError("Limit");
+    if (!("exclude" in body)) throw new MissingFieldError("Exclude");
 
     const parsedBody = {
         difficulty: parseDifficulty(body.difficulty),

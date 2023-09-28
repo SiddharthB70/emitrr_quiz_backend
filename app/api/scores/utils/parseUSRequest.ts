@@ -1,13 +1,14 @@
 import { Difficulty } from "../../../types";
+import MissingFieldError from "../../../utils/missingFieldError";
+import RequestBodyError from "../../../utils/requestBodyError";
 import { USRequest } from "../scores.types";
 
 const parseUSRequest = (body: unknown): USRequest => {
-    if (!(body && body instanceof Object))
-        throw new Error("Request body missing");
+    if (!(body && body instanceof Object)) throw new RequestBodyError();
 
-    if (!("language" in body)) throw new Error("Language missing");
-    if (!("score" in body)) throw new Error("Score missing");
-    if (!("proficiency" in body)) throw new Error("Proficiency missing");
+    if (!("language" in body)) throw new MissingFieldError("Language");
+    if (!("score" in body)) throw new MissingFieldError("Score");
+    if (!("proficiency" in body)) throw new MissingFieldError("Proficiency");
 
     const parsedBody: USRequest = {
         language: parseLanguage(body.language),

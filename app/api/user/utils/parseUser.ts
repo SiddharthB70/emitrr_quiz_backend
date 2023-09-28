@@ -1,14 +1,16 @@
+import MissingFieldError from "../../../utils/missingFieldError";
+import RequestBodyError from "../../../utils/requestBodyError";
+
 interface NewUser {
     username: string;
     password: string;
 }
 
 const parseUser = (user: unknown): NewUser => {
-    if (!(user && user instanceof Object))
-        throw new Error("Request does not contain body");
+    if (!(user && user instanceof Object)) throw new RequestBodyError();
 
-    if (!("username" in user)) throw new Error("Username unavailable");
-    if (!("password" in user)) throw new Error("Password unavailable");
+    if (!("username" in user)) throw new MissingFieldError("Username");
+    if (!("password" in user)) throw new MissingFieldError("Password");
 
     const newUser = {
         username: parseUsername(user.username),

@@ -1,9 +1,10 @@
+import MissingFieldError from "../../../utils/missingFieldError";
+import RequestBodyError from "../../../utils/requestBodyError";
 import { LBRequest } from "../scores.types";
 
 const parseLBRequest = (query: unknown): LBRequest => {
-    if (!(query && query instanceof Object))
-        throw new Error("Request does not contain query");
-    if (!("language" in query)) throw new Error("Language field missing");
+    if (!(query && query instanceof Object)) throw new RequestBodyError();
+    if (!("language" in query)) throw new MissingFieldError("Language");
 
     const parsedQuery = {
         language: parseLanguage(query.language),

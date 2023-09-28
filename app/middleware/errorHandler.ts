@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import AuthorizationError from "../utils/authorizationError";
 import logger from "../utils/logger";
 import UniqueError from "../utils/uniqueError";
+import MissingFieldError from "../utils/missingFieldError";
+import RequestBodyError from "../utils/requestBodyError";
 
 const errorHandler = (
     error: unknown,
@@ -13,8 +15,14 @@ const errorHandler = (
         return res.status(401).json(error.message);
     } else if (error instanceof UniqueError) {
         return res.status(409).json(error.message);
+    } else if (
+        error instanceof MissingFieldError ||
+        error instanceof RequestBodyError
+    ) {
+        return res.status(400).json(error.message);
     } else if (error instanceof Error) {
-        return logger.error(error.message);
+        logger.error(error.message);
+        return res.status(500).send();
     }
 
     next(error);
