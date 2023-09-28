@@ -3,14 +3,13 @@ import parseGetQuestion from "./utils/parseGetQuestion";
 import Question from "./questions.model";
 
 export const getQuestion = async (req: Request, res: Response) => {
-    const body = parseGetQuestion(req.body);
+    const query = parseGetQuestion(req.query);
     const questions = await Question.aggregate()
         .match({
-            language: body.language,
-            difficulty: body.difficulty,
-            _id: { $nin: body.exclude },
+            language: query.language,
+            difficulty: query.difficulty,
         })
-        .sample(body.limit)
+        .sample(query.limit)
         .addFields({ id: "$_id" });
 
     const questionDocuments = questions.map((question) =>
