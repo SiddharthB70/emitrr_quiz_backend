@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from "express";
+import AuthorizationError from "../utils/authorizationError";
 
-const authHandler = (req: Request, res: Response, next: NextFunction) => {
+const authHandler = (req: Request, _res: Response, next: NextFunction) => {
     if (!req.session || !req.session.clientId) {
-        return res
-            .status(401)
-            .json({ type: "error", message: "Unauthorized access" });
+        throw new AuthorizationError();
     }
 
     next();
