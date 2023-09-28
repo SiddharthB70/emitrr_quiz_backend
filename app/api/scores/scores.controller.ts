@@ -46,5 +46,5 @@ export const postUserScore = async (req: Request, res: Response) => {
         await userScore.save();
     }
 
-    res.status(201).json({ type: "success", message: "result saved" });
+    res.status(201).json("Quiz Saved");
 };

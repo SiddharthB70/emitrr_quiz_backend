@@ -54,7 +54,6 @@ const parseExclude = (exclude: unknown): Types.ObjectId[] => {
         throw new Error("Incorrect object ids");
 
     return exclude.map((id) => new Types.ObjectId(id));
- 
 };
 
 const isObjectIdArray = (

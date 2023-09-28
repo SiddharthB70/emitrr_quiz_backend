@@ -6,7 +6,7 @@ const errorHandler = (
     next: NextFunction,
 ) => {
     if (error instanceof Error) {
-        return res.status(401).json({ type: "error", message: error.message });
+        return res.status(401).json(error.message);
     }
 
     next(error);

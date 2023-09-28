@@ -17,8 +17,15 @@ import RedisStore from "connect-redis";
 import questionsRouter from "./api/questions";
 import scoresRouter from "./api/scores";
 import languagesRouter from "./api/languages";
+import cors from "cors";
 
 const app = express();
+app.use(
+    cors({
+        credentials: true,
+        origin: ["http://localhost:3000"],
+    }),
+);
 app.use(express.json());
 
 mongoose
