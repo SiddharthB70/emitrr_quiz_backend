@@ -1,6 +1,10 @@
-import { Difficulty } from "../../../types";
 import MissingFieldError from "../../../utils/missingFieldError";
 import RequestBodyError from "../../../utils/requestBodyError";
+import {
+    parseDifficulty,
+    parseNumber,
+    parseString,
+} from "../../utils/parseFunctions";
 import { USRequest } from "../scores.types";
 
 const parseUSRequest = (body: unknown): USRequest => {
@@ -11,40 +15,12 @@ const parseUSRequest = (body: unknown): USRequest => {
     if (!("proficiency" in body)) throw new MissingFieldError("Proficiency");
 
     const parsedBody: USRequest = {
-        language: parseLanguage(body.language),
-        proficiency: parseProficiency(body.proficiency),
-        score: parseScore(body.score),
+        language: parseString(body.language, "language"),
+        proficiency: parseDifficulty(body.proficiency),
+        score: parseNumber(body.score, "score"),
     };
 
     return parsedBody;
-};
-
-const parseLanguage = (language: unknown): string => {
-    if (!isString(language)) throw new Error("Invalid language format");
-    return language;
-};
-
-const isString = (text: unknown): text is string => {
-    return text instanceof String || typeof text === "string";
-};
-
-const parseProficiency = (proficiency: unknown): Difficulty => {
-    if (!isNumber(proficiency) || !isProficiency(proficiency))
-        throw new Error("Invalid proficiency format");
-    return proficiency;
-};
-
-const parseScore = (val: unknown): number => {
-    if (!isNumber(val)) throw new Error("Invalid score format");
-    return val;
-};
-
-const isNumber = (val: unknown): val is number => {
-    return val instanceof Number || typeof val === "number";
-};
-
-const isProficiency = (num: number): num is Difficulty => {
-    return [1, 2, 3].includes(num);
 };
 
 export default parseUSRequest;

@@ -1,5 +1,6 @@
 import MissingFieldError from "../../../utils/missingFieldError";
 import RequestBodyError from "../../../utils/requestBodyError";
+import { parseString } from "../../utils/parseFunctions";
 
 interface NewUser {
     username: string;
@@ -13,25 +14,11 @@ const parseUser = (user: unknown): NewUser => {
     if (!("password" in user)) throw new MissingFieldError("Password");
 
     const newUser = {
-        username: parseUsername(user.username),
-        password: parsePassword(user.password),
+        username: parseString(user.username, "username"),
+        password: parseString(user.password, "password"),
     };
 
     return newUser;
-};
-
-const parseUsername = (value: unknown): string => {
-    if (!isString(value)) throw new Error("Invalid Username format");
-    return value;
-};
-
-const parsePassword = (value: unknown): string => {
-    if (!isString(value)) throw new Error("Invalid Password format");
-    return value;
-};
-
-const isString = (text: unknown): text is string => {
-    return text instanceof String || typeof text === "string";
 };
 
 export default parseUser;
