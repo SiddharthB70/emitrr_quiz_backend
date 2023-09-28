@@ -4,8 +4,8 @@ import Score from "./scores.model";
 import parseUSRequest from "./utils/parseUSRequest";
 
 export const getLeaderBoard = async (req: Request, res: Response) => {
-    const body = parseLBRequest(req.body);
-    const leaderBoard = await Score.find({ language: body.language })
+    const query = parseLBRequest(req.query);
+    const leaderBoard = await Score.find({ language: query.language })
         .populate("user")
         .select(["-language", "-proficiency"])
         .sort({ score: -1 })

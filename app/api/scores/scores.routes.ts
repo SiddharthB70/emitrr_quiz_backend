@@ -6,7 +6,7 @@ import {
 } from "./scores.controller";
 const scoresRouter = Router();
 
-scoresRouter.post("/leaderBoard", getLeaderBoard);
+scoresRouter.get("/leaderBoard", getLeaderBoard);
 scoresRouter.get("/user", getUserScore);
 scoresRouter.post("/user", postUserScore);
 

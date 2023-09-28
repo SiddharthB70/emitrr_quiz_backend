@@ -1,14 +1,14 @@
 import { LBRequest } from "../scores.types";
 
-const parseLBRequest = (body: unknown): LBRequest => {
-    if (!(body && body instanceof Object))
-        throw new Error("Request does not contain body");
-    if (!("language" in body)) throw new Error("Language field missing");
+const parseLBRequest = (query: unknown): LBRequest => {
+    if (!(query && query instanceof Object))
+        throw new Error("Request does not contain query");
+    if (!("language" in query)) throw new Error("Language field missing");
 
-    const parsedBody = {
-        language: parseLanguage(body.language),
+    const parsedQuery = {
+        language: parseLanguage(query.language),
     };
-    return parsedBody;
+    return parsedQuery;
 };
 
 const parseLanguage = (language: unknown): string => {
