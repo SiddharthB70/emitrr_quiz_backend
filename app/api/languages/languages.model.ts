@@ -1,21 +1,20 @@
 import { Schema, model } from "mongoose";
 import { ILanguage, ILanguageDocument } from "./languages.types";
+import UniqueError from "../../utils/uniqueError";
 
 const languageSchema = new Schema<ILanguage>({
     language: {
         type: String,
         required: true,
         unique: true,
-        validate: {
-            validator: async function (this: ILanguageDocument) {
-                const language = await this.$model("Language").findOne({
-                    language: this.language,
-                });
-                return !language;
-            },
-            message: "Language already exists",
-        },
     },
+});
+
+languageSchema.pre("save", async function (this: ILanguageDocument) {
+    const language = await this.$model("Language").findOne({
+        language: this.language,
+    });
+    if (language) throw new UniqueError("Language");
 });
 
 languageSchema.set("toJSON", {
