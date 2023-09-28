@@ -19,10 +19,12 @@ const errorHandler = (
     } else if (
         error instanceof MissingFieldError ||
         error instanceof RequestBodyError ||
-        error instanceof FormatError
+        error instanceof FormatError ||
+        error instanceof SyntaxError
     ) {
         return res.status(400).json(error.message);
     } else if (error instanceof Error) {
+        logger.error(error.name);
         logger.error(error.message);
         return res.status(500).send();
     }
