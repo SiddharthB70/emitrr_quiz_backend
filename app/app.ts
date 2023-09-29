@@ -69,7 +69,7 @@ app.use(
         secret: serverConfig.SESSION_SECRET,
         name: "session_id",
         cookie: {
-            secure: true,
+            secure: false,
             httpOnly: true,
             maxAge: 1000 * 60 * 30,
         },
