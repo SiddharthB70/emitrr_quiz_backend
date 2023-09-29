@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import parseUser from "./utils/parseUser";
 import User from "./user.model";
 import bcrypt from "bcrypt";
+import AuthorizationError from "../../utils/authorizationError";
 
 export const registerUser = async (req: Request, res: Response) => {
     const body = parseUser(req.body);
@@ -28,6 +29,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
 export const checkLoggedIn = async (req: Request, res: Response) => {
     const userId = req.session.clientId;
+    if (!userId) throw new AuthorizationError();
     const user = await User.findById(userId);
     res.json(user);
 };

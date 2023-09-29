@@ -23,8 +23,6 @@ app.use(
 );
 app.use(express.json());
 
-console.log(serverConfig.ORIGIN_URI);
-
 mongoose
     .connect(dbConfig.MONGO_URI)
     .then(() => {
@@ -58,21 +56,6 @@ redisClient
     .catch((error) => {
         console.log(error);
     });
-app.use("/api/users", userRouter);
-app.use(
-    session({
-        store: new RedisStore({ client: redisClient }),
-        secret: serverConfig.SESSION_SECRET,
-        name: "session_id",
-        cookie: {
-            secure: false,
-            httpOnly: true,
-            maxAge: 1000 * 60 * 30,
-        },
-        saveUninitialized: false,
-        resave: false,
-    }),
-);
 
 declare module "express-session" {
     interface SessionData {
@@ -80,6 +63,21 @@ declare module "express-session" {
     }
 }
 
+app.use(
+    session({
+        store: new RedisStore({ client: redisClient }),
+        secret: serverConfig.SESSION_SECRET,
+        name: "session_id",
+        cookie: {
+            secure: true,
+            httpOnly: true,
+            maxAge: 1000 * 60 * 30,
+        },
+        saveUninitialized: false,
+        resave: false,
+    }),
+);
+app.use("/api/users", userRouter);
 app.use(authHandler);
 app.use("/api/questions", questionsRouter);
 app.use("/api/scores", scoresRouter);
