@@ -9,8 +9,7 @@ export const getQuestion = async (req: Request, res: Response) => {
             language: query.language,
             difficulty: query.difficulty,
         })
-        .sample(query.limit)
-        .addFields({ id: "$_id" });
+        .sample(query.limit);
 
     const questionDocuments = questions.map((question) =>
         Question.hydrate(question),

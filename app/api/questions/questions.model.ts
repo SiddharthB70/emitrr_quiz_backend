@@ -13,6 +13,15 @@ const questionSchema = new Schema<IQuestion>({
     language: { type: String, required: true },
 });
 
+questionSchema.set("toJSON", {
+    transform: (_doc, ret) => {
+        delete ret.__v;
+        delete ret._id;
+        delete ret.difficulty;
+        delete ret.language;
+    },
+});
+
 const Question = model<IQuestion>("Question", questionSchema);
 
 export default Question;

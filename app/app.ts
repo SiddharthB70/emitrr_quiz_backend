@@ -1,4 +1,4 @@
-import { dbConfig } from "./config";
+import { dbConfig, redisConfig, serverConfig } from "./config";
 require("express-async-errors");
 
 import express from "express";
@@ -18,7 +18,7 @@ const app = express();
 app.use(
     cors({
         credentials: true,
-        origin: ["http://localhost:3000"],
+        origin: [serverConfig.ORIGIN_URI],
     }),
 );
 app.use(express.json());
@@ -28,16 +28,24 @@ mongoose
     .then(() => {
         console.log("Connected to database");
     })
-    .catch((error: unknown) => {
-        if (error instanceof Error) {
-            console.log("Unable to connect to database. " + error.message);
-        }
+    .catch(() => {
+        console.log("Unable to connect to database through primary uri.");
+
+        mongoose
+            .connect(dbConfig.MONGO_SECONDARY_URI)
+            .then(() => {
+                console.log("Connected to database through secondary uri.");
+            })
+            .catch(() => {
+                console.log("Unable to connect to database ");
+            });
     });
 
 const redisClient = createClient({
+    password: redisConfig.REDIS_PASSWORD,
     socket: {
-        port: 6379,
-        host: "localhost",
+        host: redisConfig.REDIS_HOST,
+        port: redisConfig.REDIS_PORT,
     },
 });
 redisClient
@@ -51,7 +59,7 @@ redisClient
 app.use(
     session({
         store: new RedisStore({ client: redisClient }),
-        secret: "secret",
+        secret: serverConfig.SESSION_SECRET,
         name: "session_id",
         cookie: {
             secure: false,
