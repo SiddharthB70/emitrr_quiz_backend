@@ -23,6 +23,8 @@ app.use(
 );
 app.use(express.json());
 
+console.log(serverConfig.ORIGIN_URI);
+
 mongoose
     .connect(dbConfig.MONGO_URI)
     .then(() => {
@@ -56,6 +58,7 @@ redisClient
     .catch((error) => {
         console.log(error);
     });
+app.use("/api/users", userRouter);
 app.use(
     session({
         store: new RedisStore({ client: redisClient }),
@@ -77,7 +80,6 @@ declare module "express-session" {
     }
 }
 
-app.use("/api/users", userRouter);
 app.use(authHandler);
 app.use("/api/questions", questionsRouter);
 app.use("/api/scores", scoresRouter);
